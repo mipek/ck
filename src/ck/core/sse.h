@@ -13,7 +13,7 @@ namespace Cki
 namespace Sse
 {
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__GNUC__)
 #  define CK_CAST_M128_M128I(x) _mm_castps_si128(x)
 #  define CK_CAST_M128I_M128(x) _mm_castsi128_ps(x)
 #else

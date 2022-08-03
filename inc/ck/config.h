@@ -124,6 +124,12 @@ struct _CkConfig
     int enableHardwareDecoding;
 #endif
 
+#if CK_PLATFORM_LINUX
+	/** Name of the application.
+      This string is passed to PulseAudio for identification purposes. */
+	const char *applicationName;
+#endif
+
     /** Memory allocation function.
       Default is NULL (system new will be used). 
       The allocator must be thread-safe. */

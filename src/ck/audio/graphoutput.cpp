@@ -20,7 +20,11 @@
 #  include "ck/audio/graphoutput_android.h"
 #  include "ck/audio/graphoutputjava_android.h"
 #elif CK_PLATFORM_LINUX
-#  include "ck/audio/graphoutput_linux.h"
+#  ifdef CK_LINUX_PULSEAUDIO
+#    include "ck/audio/graphoutput_linux_pulse.h"
+#  else
+#    include "ck/audio/graphoutput_linux_alsa.h"
+#  endif
 #elif CK_PLATFORM_WIN || CK_PLATFORM_WP8
 #  include "ck/audio/graphoutput_win.h"
 #endif

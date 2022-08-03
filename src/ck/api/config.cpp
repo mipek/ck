@@ -32,6 +32,9 @@ void CkConfigInit(CkConfig* config)
 #if CK_PLATFORM_IOS || CK_PLATFORM_TVOS
     config->enableHardwareDecoding = false;
 #endif
+#if CK_PLATFORM_LINUX
+	config->applicationName = NULL;
+#endif
     config->allocFunc = NULL;
     config->freeFunc = NULL;
     config->logMask = kCkLog_All;

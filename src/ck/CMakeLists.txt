@@ -8,7 +8,7 @@ endif()
 project(ck CXX)
 set(PROJECT_NAME ck)
 
-#option(CK_LINUX_PULSE "Use PulseAudio instead of ALSA on Linux")
+option(CK_LINUX_PULSE "Use PulseAudio instead of ALSA on Linux")
 
 ## helper macro
 macro (add_compiler_flags)
