@@ -25,11 +25,13 @@ private:
     SLVolumeItf m_playerVolume;
 
     int m_framesPerBuffer;
-    int16* m_bufs[2];
-    int32* m_renderBuf;
+    int m_bytesPerBuffer;
+    void* m_bufs[2];
+    void* m_renderBuf;
     int m_curBuf;
 
-    int16* m_primingBuf;
+    void* m_primingBuf;
+    int m_androidSdkVersion;
 
     static void bufferDoneCallback(SLAndroidSimpleBufferQueueItf, void *context);
     void bufferDone(SLAndroidSimpleBufferQueueItf);
