@@ -10,8 +10,7 @@
  *                                                                  *
  ********************************************************************
 
- function: #ifdef jail to whip a few platforms into the UNIX ideal.
- last mod: $Id: os_types.h 17712 2010-12-03 17:10:02Z xiphmont $
+ function: Define a consistent set of types on each platform.
 
  ********************************************************************/
 #ifndef _OS_TYPES_H
@@ -19,25 +18,12 @@
 
 /* make it easy on the folks that want to compile the libs with a
    different malloc than stdlib */
-
-#if 0
 #define _ogg_malloc  malloc
 #define _ogg_calloc  calloc
 #define _ogg_realloc realloc
 #define _ogg_free    free
-#else
-#define _ogg_malloc  CK_malloc
-#define _ogg_calloc  CK_calloc
-#define _ogg_realloc CK_realloc
-#define _ogg_free    CK_free
 
-void* CK_malloc(size_t);
-void* CK_calloc(size_t, size_t);
-void* CK_realloc(void*, size_t);
-void CK_free(void*);
-#endif
-
-#if defined(_WIN32) 
+#if defined(_WIN32)
 
 #  if defined(__CYGWIN__)
 #    include <stdint.h>
@@ -57,36 +43,40 @@ void CK_free(void*);
      typedef unsigned long long ogg_uint64_t;
 #  elif defined(__MWERKS__)
      typedef long long ogg_int64_t;
+     typedef unsigned long long ogg_uint64_t;
      typedef int ogg_int32_t;
      typedef unsigned int ogg_uint32_t;
      typedef short ogg_int16_t;
      typedef unsigned short ogg_uint16_t;
 #  else
-     /* MSVC/Borland */
-     typedef __int64 ogg_int64_t;
-     typedef __int32 ogg_int32_t;
-     typedef unsigned __int32 ogg_uint32_t;
-     typedef __int16 ogg_int16_t;
-     typedef unsigned __int16 ogg_uint16_t;
+#    if defined(_MSC_VER) && (_MSC_VER >= 1800) /* MSVC 2013 and newer */
+#      include <stdint.h>
+       typedef int16_t ogg_int16_t;
+       typedef uint16_t ogg_uint16_t;
+       typedef int32_t ogg_int32_t;
+       typedef uint32_t ogg_uint32_t;
+       typedef int64_t ogg_int64_t;
+       typedef uint64_t ogg_uint64_t;
+#    else
+       /* MSVC/Borland */
+       typedef __int64 ogg_int64_t;
+       typedef __int32 ogg_int32_t;
+       typedef unsigned __int32 ogg_uint32_t;
+       typedef unsigned __int64 ogg_uint64_t;
+       typedef __int16 ogg_int16_t;
+       typedef unsigned __int16 ogg_uint16_t;
+#    endif
 #  endif
-
-#elif defined(__MACOS__)
-
-#  include <sys/types.h>
-   typedef SInt16 ogg_int16_t;
-   typedef UInt16 ogg_uint16_t;
-   typedef SInt32 ogg_int32_t;
-   typedef UInt32 ogg_uint32_t;
-   typedef SInt64 ogg_int64_t;
 
 #elif (defined(__APPLE__) && defined(__MACH__)) /* MacOS X Framework build */
 
-#  include <inttypes.h>
+#  include <sys/types.h>
    typedef int16_t ogg_int16_t;
-   typedef uint16_t ogg_uint16_t;
+   typedef u_int16_t ogg_uint16_t;
    typedef int32_t ogg_int32_t;
-   typedef uint32_t ogg_uint32_t;
+   typedef u_int32_t ogg_uint32_t;
    typedef int64_t ogg_int64_t;
+   typedef u_int64_t ogg_uint64_t;
 
 #elif defined(__HAIKU__)
 
@@ -97,6 +87,7 @@ void CK_free(void*);
    typedef int ogg_int32_t;
    typedef unsigned int ogg_uint32_t;
    typedef long long ogg_int64_t;
+   typedef unsigned long long ogg_uint64_t;
 
 #elif defined(__BEOS__)
 
@@ -107,6 +98,7 @@ void CK_free(void*);
    typedef int32_t ogg_int32_t;
    typedef uint32_t ogg_uint32_t;
    typedef int64_t ogg_int64_t;
+   typedef uint64_t ogg_uint64_t;
 
 #elif defined (__EMX__)
 
@@ -116,6 +108,8 @@ void CK_free(void*);
    typedef int ogg_int32_t;
    typedef unsigned int ogg_uint32_t;
    typedef long long ogg_int64_t;
+   typedef unsigned long long ogg_uint64_t;
+
 
 #elif defined (DJGPP)
 
@@ -124,11 +118,13 @@ void CK_free(void*);
    typedef int ogg_int32_t;
    typedef unsigned int ogg_uint32_t;
    typedef long long ogg_int64_t;
+   typedef unsigned long long ogg_uint64_t;
 
 #elif defined(R5900)
 
    /* PS2 EE */
    typedef long ogg_int64_t;
+   typedef unsigned long ogg_uint64_t;
    typedef int ogg_int32_t;
    typedef unsigned ogg_uint32_t;
    typedef short ogg_int16_t;
@@ -141,6 +137,7 @@ void CK_free(void*);
    typedef signed int ogg_int32_t;
    typedef unsigned int ogg_uint32_t;
    typedef long long int ogg_int64_t;
+   typedef unsigned long long int ogg_uint64_t;
 
 #elif defined(__TMS320C6X__)
 
@@ -150,16 +147,7 @@ void CK_free(void*);
    typedef signed int ogg_int32_t;
    typedef unsigned int ogg_uint32_t;
    typedef long long int ogg_int64_t;
-
-#elif defined(__ANDROID__) || defined(__linux__)
-
-#  include <stdint.h>
-   typedef int16_t ogg_int16_t;
-   typedef uint16_t ogg_uint16_t;
-   typedef int32_t ogg_int32_t;
-   typedef uint32_t ogg_uint32_t;
-   typedef int64_t ogg_int64_t;
-   typedef uint64_t ogg_uint64_t;
+   typedef unsigned long long int ogg_uint64_t;
 
 #else
 
